@@ -1,0 +1,127 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "barryvdh/laravel-dompdf": "*",
+        "brian2694/laravel-toastr": "^5.54",
+        "dgvai/laravel-sslcommerz": "^1.0",
+        "doctrine/dbal": "^3.0",
+        "gregwar/captcha": "^1.1",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "intervention/image": "^2.5",
+        "iyzico/iyzipay-php": "^2.0",
+        "kreait/firebase-php": "^7.10",
+        "laravel/framework": "^11.0",
+        "laravel/passport": "^12.0",
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "^4.0",
+        "lcobucci/jwt": "^4.1",
+        "madnest/madzipper": "^1.1",
+        "mercadopago/dx-php": "2.4.2",
+        "mpdf/mpdf": "^8.2",
+        "nwidart/laravel-modules": "^9.0",
+        "openai-php/laravel": "^0.11.0",
+        "paypal/rest-api-sdk-php": "^1.6",
+        "phonepe/phonepe-pg-php-sdk": "^1.0",
+        "rap2hpoutre/fast-excel": "^5.3",
+        "razorpay/razorpay": "^2.5",
+        "simplesoftwareio/simple-qrcode": "~4",
+        "stripe/stripe-php": "^7.61",
+        "twilio/sdk": "^6.28",
+        "unicodeveloper/laravel-paystack": "^1.0",
+        "xendit/xendit-php": "^2.19"
+    },
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.5",
+        "spatie/laravel-ignition": "^2.0",
+        "fzaninotto/faker": "*",
+        "mockery/mockery": "^1.3.1",
+        "nunomaduro/collision": "^8.1",
+        "phpunit/phpunit": "^10.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "php-http/discovery": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "autoload": {
+        "files": [
+            "app/CentralLogics/banner.php",
+            "app/CentralLogics/category.php",
+            "app/CentralLogics/product.php",
+            "app/CentralLogics/helpers.php",
+            "app/CentralLogics/order.php",
+            "app/CentralLogics/sms_module.php",
+            "app/CentralLogics/Translation.php",
+            "app/CentralLogics/Constants.php",
+            "app/Library/Constant.php",
+            "app/Library/Responses.php",
+            "app/CentralLogics/AddFundHook.php"
+        ],
+        "psr-4": {
+            "App\\": "app/",
+            "Modules\\": "Modules/"
+        },
+        "classmap": [
+            "database/seeds",
+            "database/factories"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": [
+                {
+                    "dist": {
+                        "type": "zip",
+                        "url": "https://phonepe.mycloudrepo.io/public/repositories/phonepe-pg-php-sdk/phonepe-pg-php-sdk.zip"
+                    },
+                    "name": "phonepe/phonepe-pg-php-sdk",
+                    "version": "1.0.0",
+                    "autoload": {
+                        "classmap": ["/"]
+                    }
+                }
+            ]
+        }
+    ]
+
+}
