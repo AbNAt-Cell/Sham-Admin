@@ -6,7 +6,7 @@
     <style>
         #location_map_div #pac-input{
             height: 40px;
-            border: 1px solid #fbc1c1;
+            border: 1px solid #FFF95B;
             outline: none;
             box-shadow: none;
             top: 7px !important;

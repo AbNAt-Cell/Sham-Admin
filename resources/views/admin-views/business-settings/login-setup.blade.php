@@ -324,7 +324,7 @@
                     title: '{{ translate("No Login Option Selected") }}!',
                     text: '{{ translate("Please select at least one login option.") }}',
                     confirmButtonText: '{{ translate("OK") }}',
-                    confirmButtonColor: '#FC6A57',
+                    confirmButtonColor: '#F3B213',
                 });
             }
         });

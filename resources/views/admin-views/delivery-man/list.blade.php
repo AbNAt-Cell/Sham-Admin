@@ -339,7 +339,7 @@
                     text: 'Want to change status',
                     type: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#FC6A57',
+                    confirmButtonColor: '#F3B213',
                     cancelButtonColor: 'default',
                     cancelButtonText: '{{ translate('No') }}',
                     confirmButtonText: '{{ translate('Yes') }}',

@@ -81,7 +81,7 @@
                 text: "{{translate('Sensitive_data! Make_sure_before_changing.')}}",
                 type: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#FC6A57',
+                confirmButtonColor: '#F3B213',
                 cancelButtonColor: 'default',
                 cancelButtonText: '{{translate('No?')}}',
                 confirmButtonText:'{{translate('Yes?')}}',

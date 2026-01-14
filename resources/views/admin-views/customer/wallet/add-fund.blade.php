@@ -71,7 +71,7 @@
                 type: 'info',
                 showCancelButton: true,
                 cancelButtonColor: 'default',
-                confirmButtonColor: '#FC6A57',
+                confirmButtonColor: '#F3B213',
                 cancelButtonText: '{{translate('no')}}',
                 confirmButtonText: '{{translate('add')}}',
                 reverseButtons: true
