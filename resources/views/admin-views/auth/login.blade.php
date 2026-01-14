@@ -24,7 +24,7 @@
         <div class="auth-wrapper-left">
             <div class="auth-left-cont">
                 <img width="310" src="{{ $logo }}" alt="{{ translate('logo') }}">
-                <h2 class="title">{{translate('your')}} <span class="c1 d-block text-capitalize">{{translate('Kitchen')}}</span> <strong class="text--039D55 c1 text-capitalize">{{translate('your_food')}}....</strong></h2>
+                <h2 class="title"><span class="c1 d-block text-capitalize">{{translate('SharwamaHut')}}</span> <strong class="text--039D55 c1 text-capitalize">{{translate('Admin_Panel')}}....</strong></h2>
             </div>
         </div>
 
