@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 :root {
-    --c1: #ff6767;
-    --c1-rgb: 255, 103, 103;
+    --c1: #F3B213;
+    --c1-rgb: 243, 178, 19;
     --c2: #006ae5;
     --tc: #334257;
     --tc-rgb: 51, 66, 87;
@@ -162,7 +162,7 @@
 
 .badge-soft-c1 {
     color: var(--c1);
-    background-color: rgba(255, 103, 103, 0.1);
+    background-color: rgba(243, 178, 19, 0.1);
 }
 
 .text-c1,
@@ -217,7 +217,7 @@
 .navbar-vertical-aside-has-menu.show > .nav-link,
 .navbar-vertical .navbar-nav.nav-tabs .active > .nav-link,
 .navbar-vertical .navbar-nav.nav-tabs .active.nav-link {
-    background: rgba(255, 103, 103, 0.1);
+    background: rgba(243, 178, 19, 0.1);
     border-radius: 5px;
 }
 
@@ -315,8 +315,8 @@
 
 .custom-select:focus,
 .form-control:focus {
-    box-shadow: 0 0 10px rgba(255, 103, 103, 0.1);
-    border-color: rgba(255, 103, 103, 0.4);
+    box-shadow: 0 0 10px rgba(243, 178, 19, 0.1);
+    border-color: rgba(243, 178, 19, 0.4);
 }
 
 .font-weight-medium {

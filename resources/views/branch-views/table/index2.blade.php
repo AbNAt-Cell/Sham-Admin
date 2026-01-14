@@ -8,10 +8,10 @@
         background: #e4e4e4;
     }
     .bg-c1 {
-        background-color: #FF6767 !important;
+        background-color: #F3B213 !important;
     }
     .c1 {
-        color: #FF6767 !important;
+        color: #F3B213 !important;
     }
 </style>
 @endpush

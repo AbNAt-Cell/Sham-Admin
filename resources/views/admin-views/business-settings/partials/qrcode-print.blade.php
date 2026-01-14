@@ -81,11 +81,11 @@
                                         <div>{{ isset($data) ? $data['opening_time'] : '09:00 AM' }} - {{ isset($data) ? $data['closing_time'] : '09:00 PM' }}</div>
                                     </div>
                                 </div>
-                                <div class="phone-number text-center mt-3" style="border-bottom: 1px solid #ff6767; padding-bottom: .5rem;">
+                                <div class="phone-number text-center mt-3" style="border-bottom: 1px solid #F3B213; padding-bottom: .5rem;">
                                     {{ translate('PHONE NUMBER') }} : {{ isset($data) ? $data['phone'] : '+00 123 4567890' }}
                                 </div>
                                 <div class="row g-0 text-center bottom-txt">
-                                    <div class="col-6 border-right py-3 px-2" style="border-right: 1px solid #ff6767;">
+                                    <div class="col-6 border-right py-3 px-2" style="border-right: 1px solid #F3B213;">
                                         {{ isset($data) ? $data['website'] : 'www.website.com' }}
                                     </div>
                                     <div class="col-6 py-3">
