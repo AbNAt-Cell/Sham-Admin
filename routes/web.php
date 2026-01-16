@@ -14,6 +14,7 @@ use App\Http\Controllers\PaymobController;
 use App\Http\Controllers\FlutterwaveController;
 use App\Http\Controllers\BkashPaymentController;
 use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\MonnifyController;
 use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Http;
@@ -80,7 +81,8 @@ $is_published = 0;
 try {
     $full_data = include('Modules/Gateways/Addon/info.php');
     $is_published = $full_data['is_published'] == 1 ? 1 : 0;
-} catch (\Exception $exception) {}
+} catch (\Exception $exception) {
+}
 
 if (!$is_published) {
     Route::group(['prefix' => 'payment'], function () {
@@ -157,6 +159,15 @@ if (!$is_published) {
         Route::group(['prefix' => 'mercadopago', 'as' => 'mercadopago.'], function () {
             Route::get('pay', [MercadoPagoController::class, 'index'])->name('index');
             Route::post('make-payment', [MercadoPagoController::class, 'make_payment'])->name('make_payment');
+        });
+
+        //MONNIFY
+        Route::group(['prefix' => 'monnify', 'as' => 'monnify.'], function () {
+            Route::get('pay', [MonnifyController::class, 'index'])->name('pay');
+            Route::any('callback', [MonnifyController::class, 'callback'])->name('callback')
+                ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+            Route::post('webhook', [MonnifyController::class, 'webhook'])->name('webhook')
+                ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
         });
     });
 }

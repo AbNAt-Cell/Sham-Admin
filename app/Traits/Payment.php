@@ -7,7 +7,7 @@ use App\Models\PaymentRequest;
 
 trait Payment
 {
-    public static function generate_link(object $payer, object $payment_info, Object $receiver)
+    public static function generate_link(object $payer, object $payment_info, object $receiver)
     {
         if ($payment_info->getPaymentAmount() <= 0) {
             throw new InvalidArgumentException(translate('Payment amount can not be 0'));
@@ -71,6 +71,7 @@ trait Payment
             'phonepe' => 'payment/phonepe/pay',
             'cashfree' => 'payment/cashfree/pay',
             'instamojo' => 'payment/instamojo/pay',
+            'monnify' => 'payment/monnify/pay',
         ];
         if (array_key_exists($payment->payment_method, $routes)) {
             return url("{$routes[$payment->payment_method]}/?payment_id={$payment->id}");

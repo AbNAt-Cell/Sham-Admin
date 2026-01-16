@@ -23,12 +23,12 @@ class ConfigController extends Controller
     use HelperTrait;
     private $map_key;
     public function __construct(
-        private Currency        $currency,
-        private Branch          $branch,
-        private TimeSchedule    $timeSchedule,
+        private Currency $currency,
+        private Branch $branch,
+        private TimeSchedule $timeSchedule,
         private BusinessSetting $businessSetting,
-        private LoginSetup      $loginSetup,
-    ){
+        private LoginSetup $loginSetup,
+    ) {
         $this->map_key = Helpers::get_business_settings('map_api_client_key');
     }
 
@@ -51,8 +51,8 @@ class ConfigController extends Controller
 
         $digitalPaymentInfos = array(
             'digital_payment' => $digitalPayment['status'] == 1 ? 'true' : 'false',
-            'plugin_payment_gateways' =>  $publishedStatus ? "true" : "false",
-            'default_payment_gateways' =>  $publishedStatus ? "false" : "true"
+            'plugin_payment_gateways' => $publishedStatus ? "true" : "false",
+            'default_payment_gateways' => $publishedStatus ? "false" : "true"
         );
 
         $currencySymbol = $this->currency->where(['currency_code' => Helpers::currency_code()])->first()->currency_symbol;
@@ -60,9 +60,9 @@ class ConfigController extends Controller
 
         $deliveryConfig = Helpers::get_business_settings('delivery_management');
         $deliveryManagement = array(
-            "status" => (int)$deliveryConfig['status'],
-            "min_shipping_charge" => (float)$deliveryConfig['min_shipping_charge'],
-            "shipping_per_km" => (float)$deliveryConfig['shipping_per_km'],
+            "status" => (int) $deliveryConfig['status'],
+            "min_shipping_charge" => (float) $deliveryConfig['min_shipping_charge'],
+            "shipping_per_km" => (float) $deliveryConfig['shipping_per_km'],
         );
 
         $playStoreConfig = Helpers::get_business_settings('play_store_config');
@@ -76,7 +76,7 @@ class ConfigController extends Controller
 
         $cookiesConfig = Helpers::get_business_settings('cookies');
         $cookies_management = array(
-            "status" => (int)$cookiesConfig['status'],
+            "status" => (int) $cookiesConfig['status'],
             "text" => $cookiesConfig['text'],
         );
 
@@ -102,9 +102,9 @@ class ConfigController extends Controller
 
         $customerVerification = [
             'status' => $status,
-            'phone'=> $phoneVerification,
-            'email'=> $emailVerification,
-            'firebase'=> (int) $firebaseOTPVerification['status'],
+            'phone' => $phoneVerification,
+            'email' => $emailVerification,
+            'firebase' => (int) $firebaseOTPVerification['status'],
         ];
 
         $loginOptions = Helpers::get_login_settings('login_options');
@@ -158,20 +158,20 @@ class ConfigController extends Controller
             'self_pickup' => (boolean) Helpers::get_business_settings('self_pickup') ?? 1,
             'delivery' => (boolean) Helpers::get_business_settings('delivery') ?? 1,
             'play_store_config' => [
-                "status" => isset($playStoreConfig) && (boolean)$playStoreConfig['status'],
+                "status" => isset($playStoreConfig) && (boolean) $playStoreConfig['status'],
                 "link" => isset($playStoreConfig) ? $playStoreConfig['link'] : null,
                 "min_version" => isset($playStoreConfig) && array_key_exists('min_version', $appStoreConfig) ? $playStoreConfig['min_version'] : null
             ],
             'app_store_config' => [
-                "status" => isset($appStoreConfig) && (boolean)$appStoreConfig['status'],
+                "status" => isset($appStoreConfig) && (boolean) $appStoreConfig['status'],
                 "link" => isset($appStoreConfig) ? $appStoreConfig['link'] : null,
                 "min_version" => isset($appStoreConfig) && array_key_exists('min_version', $appStoreConfig) ? $appStoreConfig['min_version'] : null
             ],
             'social_media_link' => SocialMedia::orderBy('id', 'desc')->active()->get(),
-            'software_version' => (string)env('SOFTWARE_VERSION') ?? null,
+            'software_version' => (string) env('SOFTWARE_VERSION') ?? null,
             'decimal_point_settings' => (int) (Helpers::get_business_settings('decimal_point_settings') ?? 2),
             'schedule_order_slot_duration' => (int) (Helpers::get_business_settings('schedule_order_slot_duration') ?? 30),
-            'time_format' => (string)(Helpers::get_business_settings('time_format') ?? '12'),
+            'time_format' => (string) (Helpers::get_business_settings('time_format') ?? '12'),
             'promotion_campaign' => $branchPromotion,
             'social_login' => [
                 'google' => (integer) $google,
@@ -205,7 +205,7 @@ class ConfigController extends Controller
             'add_fund_to_wallet' => (integer) (Helpers::get_business_settings('add_fund_to_wallet') ?? 0),
             'apple_login' => $appleLogin,
             'cutlery_status' => (integer) (Helpers::get_business_settings('cutlery_status') ?? 0),
-            'firebase_otp_verification_status' => (integer)($firebaseOTPVerification ? $firebaseOTPVerification['status'] : 0),
+            'firebase_otp_verification_status' => (integer) ($firebaseOTPVerification ? $firebaseOTPVerification['status'] : 0),
             'customer_verification' => $customerVerification,
             'footer_copyright_text' => Helpers::get_business_settings('footer_text'),
             'footer_description_text' => Helpers::get_business_settings('footer_description_text'),
@@ -256,7 +256,7 @@ class ConfigController extends Controller
 
         $methods = DB::table('addon_settings')
             ->whereIn('settings_type', ['payment_config'])
-            ->whereIn('key_name', ['ssl_commerz','paypal','stripe','razor_pay','senang_pay','paystack','paymob_accept','flutterwave','bkash','mercadopago'])
+            ->whereIn('key_name', ['ssl_commerz', 'paypal', 'stripe', 'razor_pay', 'senang_pay', 'paystack', 'paymob_accept', 'flutterwave', 'bkash', 'mercadopago', 'monnify'])
             ->get();
 
         $env = env('APP_MODE') == 'live' ? 'live' : 'test';
@@ -290,7 +290,7 @@ class ConfigController extends Controller
             'destination_long' => 'required',
         ]);
 
-        if ($validator->errors()->count()>0) {
+        if ($validator->errors()->count() > 0) {
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
 
@@ -301,7 +301,7 @@ class ConfigController extends Controller
             "waypoint" => [
                 "location" => [
                     "latLng" => [
-                        "latitude" =>  $request['origin_lat'],
+                        "latitude" => $request['origin_lat'],
                         "longitude" => $request['origin_long']
                     ]
                 ]
@@ -344,7 +344,7 @@ class ConfigController extends Controller
             'branch_id' => 'required',
         ]);
 
-        if ($validator->errors()->count()>0) {
+        if ($validator->errors()->count() > 0) {
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
 
