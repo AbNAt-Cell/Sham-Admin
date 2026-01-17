@@ -132,29 +132,46 @@ class MonnifyController extends Controller
     /**
      * Handle callback from Monnify after payment
      */
+    /**
+     * Handle callback from Monnify after payment
+     */
     public function callback(Request $request)
     {
         $paymentId = $request->get('payment_id');
         $paymentReference = $request->get('paymentReference');
         $transactionReference = $request->get('transactionReference');
 
+        Log::info('Monnify Callback Hit', [
+            'payment_id' => $paymentId,
+            'payment_ref' => $paymentReference,
+            'transaction_ref' => $transactionReference
+        ]);
+
         if (!$paymentId) {
+            Log::error('Monnify Callback: No payment ID');
             return redirect()->route('payment-fail');
         }
 
         $paymentData = $this->payment::where(['id' => $paymentId])->first();
 
         if (!$paymentData) {
+            Log::error('Monnify Callback: Payment data not found', ['id' => $paymentId]);
             return redirect()->route('payment-fail');
         }
 
         // Verify transaction status with Monnify
         // Try transactionReference first, then fallback to paymentData->transaction_id, then paymentReference
-        $transactionStatus = $this->verifyTransaction($transactionReference ?? $paymentData->transaction_id);
-
-        if (!$transactionStatus && $paymentReference) {
-            $transactionStatus = $this->verifyTransaction($paymentReference, true);
+        $referenceToVerify = $transactionReference ?? $paymentData->transaction_id;
+        if (!$referenceToVerify && $paymentReference) {
+            $referenceToVerify = $paymentReference;
+            // If using payment ref, set flag true in verifyTransaction call
         }
+
+        Log::info('Monnify Callback: Verifying transaction', ['reference' => $referenceToVerify]);
+
+        $transactionStatus = $this->verifyTransaction($referenceToVerify, $referenceToVerify === $paymentReference);
+
+        Log::info('Monnify Verification Result', ['status' => $transactionStatus ? $transactionStatus->paymentStatus : 'NULL']);
 
         if ($transactionStatus && $transactionStatus->paymentStatus === 'PAID') {
             // Update payment record
@@ -174,6 +191,7 @@ class MonnifyController extends Controller
         }
 
         // Payment failed
+        Log::warning('Monnify Callback: Verification failed or not paid');
         if (isset($paymentData) && function_exists($paymentData->failure_hook)) {
             call_user_func($paymentData->failure_hook, $paymentData);
         }
