@@ -83,7 +83,7 @@ class MonnifyController extends Controller
         $payerInfo = json_decode($paymentData->payer_information);
         $additionalData = json_decode($paymentData->additional_data);
 
-        $callbackUrl = url('/') . '/payment/monnify/callback?payment_id=' . $paymentData->id;
+        $callbackUrl = url('/') . '/payment/monnify/callback';
 
         $formData = [
             'amount' => (float) $paymentData->payment_amount,
@@ -140,6 +140,20 @@ class MonnifyController extends Controller
         $paymentId = $request->get('payment_id');
         $paymentReference = $request->get('paymentReference');
         $transactionReference = $request->get('transactionReference');
+
+        // Logic to fix double query param issue or missing payment_id
+        if (!$paymentId && $paymentReference) {
+            // Extract payment ID from reference: MONNIFY_{UUID}_{TIMESTAMP}
+            $parts = explode('_', $paymentReference);
+            if (count($parts) >= 2) {
+                $paymentId = $parts[1];
+            }
+        }
+
+        // Handle malformed payment_id if it contains '?'
+        if ($paymentId && str_contains($paymentId, '?')) {
+            $paymentId = explode('?', $paymentId)[0];
+        }
 
         Log::info('Monnify Callback Hit', [
             'payment_id' => $paymentId,
