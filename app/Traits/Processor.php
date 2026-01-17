@@ -13,11 +13,11 @@ use App\Models\Setting;
 use Illuminate\Support\Facades\Storage;
 use App\Models\PaymentRequest;
 
-trait  Processor
+trait Processor
 {
     public function response_formatter($constant, $content = null, $errors = []): array
     {
-        $constant = (array)$constant;
+        $constant = (array) $constant;
         $constant['content'] = $content;
         $constant['errors'] = $errors;
         return $constant;
@@ -66,9 +66,11 @@ trait  Processor
 
     public function file_uploader(string $dir, string $format, $image = null, $old_image = null)
     {
-        if ($image == null) return $old_image ?? 'def.png';
+        if ($image == null)
+            return $old_image ?? 'def.png';
 
-        if (isset($old_image)) Storage::disk('public')->delete($dir . $old_image);
+        if (isset($old_image))
+            Storage::disk('public')->delete($dir . $old_image);
 
         $imageName = \Carbon\Carbon::now()->toDateString() . "-" . uniqid() . "." . $format;
         if (!Storage::disk('public')->exists($dir)) {
@@ -83,9 +85,16 @@ trait  Processor
     {
         $payment_info = PaymentRequest::find($payment_info->id);
         $token_string = 'payment_method=' . $payment_info->payment_method . '&&attribute_id=' . $payment_info->attribute_id . '&&transaction_reference=' . $payment_info->transaction_id;
+
+        // Extract order_id from attribute_id if possible (assuming it's formatted as such, or just pass it if we have it)
+        // For now, we'll just pass the flag as status too to satisfy the Flutter app's expectation
+        $status = ($payment_flag == 'success') ? 'payment-success' : 'payment-fail';
+        $order_id = $payment_info->attribute_id; // In this system, attribute_id often holds the order_id
+
         if (in_array($payment_info->payment_platform, ['web', 'app']) && $payment_info['external_redirect_link'] != null) {
-            return redirect($payment_info['external_redirect_link'] . '?flag=' . $payment_flag . '&&token=' . base64_encode($token_string));
+            $separator = str_contains($payment_info['external_redirect_link'], '?') ? '&' : '?';
+            return redirect($payment_info['external_redirect_link'] . $separator . 'flag=' . $payment_flag . '&status=' . $status . '&order_id=' . $order_id . '&token=' . base64_encode($token_string));
         }
-        return redirect()->route('payment-' . $payment_flag, ['token' => base64_encode($token_string)]);
+        return redirect()->route('payment-' . $payment_flag, ['token' => base64_encode($token_string), 'status' => $status, 'order_id' => $order_id]);
     }
 }

@@ -149,14 +149,19 @@ class MonnifyController extends Controller
         }
 
         // Verify transaction status with Monnify
+        // Try transactionReference first, then fallback to paymentData->transaction_id, then paymentReference
         $transactionStatus = $this->verifyTransaction($transactionReference ?? $paymentData->transaction_id);
+
+        if (!$transactionStatus && $paymentReference) {
+            $transactionStatus = $this->verifyTransaction($paymentReference, true);
+        }
 
         if ($transactionStatus && $transactionStatus->paymentStatus === 'PAID') {
             // Update payment record
             $this->payment::where(['id' => $paymentId])->update([
                 'payment_method' => 'monnify',
                 'is_paid' => 1,
-                'transaction_id' => $transactionReference,
+                'transaction_id' => $transactionReference ?? $transactionStatus->transactionReference ?? $paymentData->transaction_id,
             ]);
 
             $data = $this->payment::where(['id' => $paymentId])->first();
@@ -241,13 +246,15 @@ class MonnifyController extends Controller
     /**
      * Verify transaction status with Monnify API
      */
-    private function verifyTransaction($transactionReference)
+    private function verifyTransaction($reference, $isPaymentReference = false)
     {
-        if (!$transactionReference) {
+        if (!$reference) {
             return null;
         }
 
-        $endpoint = "{$this->baseUrl}/api/v2/transactions/" . urlencode($transactionReference);
+        $endpoint = $isPaymentReference
+            ? "{$this->baseUrl}/api/v2/transactions/query?paymentReference=" . urlencode($reference)
+            : "{$this->baseUrl}/api/v2/transactions/" . urlencode($reference);
 
         try {
             // Get OAuth2 token first
@@ -267,7 +274,7 @@ class MonnifyController extends Controller
         } catch (\Exception $e) {
             Log::error('Monnify verification exception', [
                 'message' => $e->getMessage(),
-                'transaction_reference' => $transactionReference
+                'transaction_reference' => $reference
             ]);
         }
 
